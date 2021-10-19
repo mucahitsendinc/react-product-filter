@@ -1,4 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+.loading{
+  width: 100vw;
+  height: 100vh;
+  padding:0;
+  margin:0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .App{
   font-family: 'Roboto',sans-serif;
   margin:0;
@@ -98,8 +107,46 @@
 .App .kategoriler .kategori div input:not(:last-child){
   border-right: 2px solid #ccc !important;
 }
-
-
+.products{
+  display: flex;
+  flex-wrap: wrap;
+}
+.products .productCard{
+  width: 15%;
+  margin-left:10px;
+  max-height: 300px;
+  background-color: #ddd;
+}
+.products .productCard .productImage{
+  height: 200px;
+  width: 100%;
+}
+.products .productCard .productTitle{
+  text-align: center;
+  width: 100%;
+  background-color: #eee;
+  padding:5px 0px;
+}
+.products .productCard .productProperties{
+  display: flex;
+  flex-wrap: wrap;
+  margin-top:8px;
+}
+.products .productCard .productProperties div{
+  border:1px solid #eee;
+  width: calc(50% - 4px);
+  height: 27px;
+  position: relative;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.products .productCard .productProperties div i{
+  position:absolute;
+  left:4px;
+  top:6px;
+}
 @media only screen and (max-width: 750px){
   .App{
     flex-direction: column;
