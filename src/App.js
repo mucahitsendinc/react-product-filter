@@ -3,39 +3,67 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import { Sentry } from "react-activity";
 import "react-activity/dist/Sentry.css";
+import { SRLWrapper } from "simple-react-lightbox";
+function useForceUpdate(){
+    const [value, setValue] = useState(0); // integer state
+    return () => setValue(value => value + 1); // update the state to force render
+}
+
 function App() {
   
+  const forceUpdate = useForceUpdate();
+
   const [data,setData]=useState([])
 
   const [products,setProducts]=useState([])
   const [kategoriler,setKategoriler]=useState([])
   const [renkler,setRenkler]=useState([])
   const [selecteds,setSelecteds]=useState([])
-  const [kategoriVisible,setKategoriVisible]=useState(true)
-  const [renkVisible,setRenkVisible]=useState(true)
+  const [kategoriVisible,setKategoriVisible]=useState(false)
+  const [renkVisible,setRenkVisible]=useState(false)
 
   const [agirlik, setAgirlik] =  useState([1,5000]);
   const [yukseklik, setYukseklik] =  useState([1,3000]);
   const [genislik, setGenislik] =  useState([1,3000]);
-  
+  const [sizes,setSizes]=useState({hacim_min:0,hacim_max:10,agirlik_min:0,agirlik_max:10,yukseklik_min:0,yukseklik_max:10})
   const resetFilter = () => {
-    setAgirlik([0,5000])
-    setYukseklik([0,3000])
-    setGenislik([0,3000])
+    
+    if(sizes!=null){
+      setAgirlik([sizes.hacim_min,sizes.hacim_max])
+      setYukseklik([sizes.yukseklik_min,sizes.yukseklik_max])
+      setGenislik([sizes.genislik_min,sizes.genislik_max])
+    }
     setKategoriVisible(true)
     setRenkVisible(false)
   };
 
   useLayoutEffect(() => {
-    fetch('https://cam.mucahit.dehasoft.com.tr/getproducts.php').then((response)=>response.json()).then(response=>{ setData(response); setProducts(response) })
-    fetch('https://cam.mucahit.dehasoft.com.tr/getcategories.php').then((response)=>response.json()).then(response=>{ setKategoriler(response) })
-    fetch('https://cam.mucahit.dehasoft.com.tr/getcolors.php').then((response)=>response.json()).then(response=>{ setRenkler(response) })
+    fetchData()
   }, [])
+  const fetchData=()=>{
+    fetch('https://cam.mucahit.dehasoft.com.tr/getproducts.php').then((response)=>response.json()).then(response=>{ setData(response); setProducts(response) })
+    fetch('https://cam.mucahit.dehasoft.com.tr/getcategories.php').then((response)=>response.json()).then(response=>{ setKategoriler(response);  })
+    fetch('https://cam.mucahit.dehasoft.com.tr/getcolors.php').then((response)=>response.json()).then(response=>{ setRenkler(response);   })
+    fetch('https://cam.mucahit.dehasoft.com.tr/getsizes.php').then((response)=>response.json()).then(response=>{ setSizes(response); 
+    setAgirlik([response.hacim_min,response.hacim_max])
+    setYukseklik([response.yukseklik_min,response.yukseklik_max])
+    setGenislik([response.genislik_min,response.genislik_max])
+    })
+  }
+  useEffect(() => {
+    setSelecteds(kategoriler.map(function(e){
+      return 'kategori:'+e
+    })
+    /*.concat(renkler.map(function(d){
+      return 'renk:'+d
+    }))*/
+    )
+  }, [renkler,kategoriler])
 
   useEffect(() => {
-    let filterResult=products.filter(item=>((item.hacim*1)>agirlik[0] && (item.hacim*1)<agirlik[1]) ? true : false)
-    filterResult=filterResult.filter(item=>((item.genislik*1)>genislik[0] && (item.genislik*1)<genislik[1]) ? true : false)
-    filterResult=filterResult.filter(item=>((item.yukseklik*1)>yukseklik[0] && (item.yukseklik*1)<yukseklik[1]) ? true : false)
+    let filterResult=products.filter(item=>((item.hacim*1)>=agirlik[0] && (item.hacim*1)<=agirlik[1]) ? true : false)
+    filterResult=filterResult.filter(item=>((item.genislik*1)>=genislik[0] && (item.genislik*1)<=genislik[1]) ? true : false)
+    filterResult=filterResult.filter(item=>((item.yukseklik*1)>=yukseklik[0] && (item.yukseklik*1)<=yukseklik[1]) ? true : false)
     filterResult=filterResult.filter(item=>{
       if(selecteds.indexOf(('renk:'+item.renk))!=-1){
         return true
@@ -47,7 +75,7 @@ function App() {
     })
     
     setData(filterResult)
-    console.log("filterResult",filterResult,agirlik[0],agirlik[1])
+    //console.log("filterResult",filterResult,agirlik[0],agirlik[1])
 
   }, [agirlik,yukseklik,genislik,selecteds])
   
@@ -55,12 +83,13 @@ function App() {
   return (
     <>
     {
-      (products.length==0 ||kategoriler.length==0 || renkler.length==0 ) ? 
+      (products.length==0 ||kategoriler.length==0 || renkler.length==0 || sizes=={hacim_min:0,hacim_max:10,agirlik_min:0,agirlik_max:10,yukseklik_min:0,yukseklik_max:10} ) ? 
        <div className="loading">
          <Sentry size={250} />
        </div>
        :
       <div className="App">
+        
         <div className="filter">
           <button onClick={()=>resetFilter()}>Filtreyi Temizle</button>
 
@@ -70,8 +99,10 @@ function App() {
               {
                 kategoriler.map((kategori,index)=>{
                   return(
-                    <label key={`kategori-${index}`}>
-                      <input type="checkbox" onChange={(e)=>{
+                    <React.Fragment key={`kategori-${index}`}>
+                    
+                    <label >
+                      <input type="checkbox" defaultChecked={true} onChange={(e)=>{
                         if(e.target.checked==true){
                           setSelecteds([...selecteds,'kategori:'+kategori])
                         }else{
@@ -79,6 +110,7 @@ function App() {
                         }
                       }} /> {kategori}
                     </label>
+                    </React.Fragment>
                   )
                 })
               }
@@ -92,7 +124,7 @@ function App() {
                 renkler.map((renk,index)=>{
                   return(
                     <label key={`renk-${index}`}>
-                      <input type="checkbox" onChange={(e)=>{
+                      <input type="checkbox" defaultChecked={false} onChange={(e)=>{
                         if(e.target.checked==true){
                           setSelecteds([...selecteds,'renk:'+renk])
                         }else{
@@ -116,8 +148,8 @@ function App() {
               </div>
               <Slider
                 value={agirlik}
-                min={1}
-                max={5000}
+                min={(sizes.hacim_min)}
+                max={(sizes.hacim_max)}
                 onChange={(event,newValue)=>setAgirlik(newValue)}
                 valueLabelDisplay="off"
               />
@@ -125,17 +157,18 @@ function App() {
           </div>
           
 
-          <div className="kategoriler">
+           <div className="kategoriler">
             <h1>Yükseklik <span>(mm)</span></h1>
             <div className="kategori">
               <div>
                 <input type="text" value={yukseklik[0]} onChange={(e)=>setYukseklik([e.target.value,yukseklik[1]])} />
                 <input type="text" value={yukseklik[1]} onChange={(e)=>setYukseklik([yukseklik[0],e.target.value])} />
               </div>
+              
               <Slider
                 value={yukseklik}
-                min={1}
-                max={3000}
+                min={sizes.yukseklik_min}
+                max={sizes.yukseklik_max}
                 onChange={(event,newValue)=>setYukseklik(newValue)}
                 valueLabelDisplay="off"
               />
@@ -152,13 +185,13 @@ function App() {
               </div>
               <Slider
                 value={genislik}
-                min={1}
-                max={3000}
+                min={sizes.genislik_min}
+                max={sizes.genislik_max}
                 onChange={(event,newValue)=>setGenislik(newValue)}
                 valueLabelDisplay="off"
               />
             </div>
-          </div>
+          </div> 
 
 
         </div>
@@ -166,13 +199,15 @@ function App() {
           {
             data.length==0 ?
             <div className="loading" style={{fontSize:26}}>
-              <center>Ürün bulunamadı</center>
+              <center>Ürün bulunamadı</center><br/>
             </div>
             :
-            <>
+            <SRLWrapper>
             {
-              data.map(element=>{
+              data.map((element,index)=>{
                 return (
+                  <React.Fragment key={`product-${index}`}>
+                  
                   <div className="productCard">
                     <img src={element.resim} className="productImage" />
                     <div className="productTitle">
@@ -185,10 +220,11 @@ function App() {
                       <div><i className="fa fa-palette"></i> {element.renk} </div>
                     </div>
                   </div>
+                  </React.Fragment>
                 )
               })
             }
-            </>
+            </SRLWrapper>
           }
         </div>
       </div>

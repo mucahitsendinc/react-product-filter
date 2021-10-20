@@ -107,32 +107,35 @@
 .App .kategoriler .kategori div input:not(:last-child){
   border-right: 2px solid #ccc !important;
 }
-.products{
+.products div{
   display: flex;
   flex-wrap: wrap;
 }
-.products .productCard{
-  width: 15%;
+.products div .productCard{
+  width: 250px;
   margin-left:10px;
+  margin-bottom:20px;
   max-height: 300px;
   background-color: #ddd;
 }
-.products .productCard .productImage{
+.products div .productCard .productImage{
   height: 200px;
+  cursor: pointer;
   width: 100%;
 }
-.products .productCard .productTitle{
+.products div .productCard .productTitle{
   text-align: center;
   width: 100%;
   background-color: #eee;
   padding:5px 0px;
 }
-.products .productCard .productProperties{
+.products div .productCard .productProperties{
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   margin-top:8px;
 }
-.products .productCard .productProperties div{
+.products div .productCard .productProperties div{
   border:1px solid #eee;
   width: calc(50% - 4px);
   height: 27px;
@@ -142,16 +145,20 @@
   align-items: center;
   justify-content: center;
 }
-.products .productCard .productProperties div i{
+.products div .productCard .productProperties div i{
   position:absolute;
   left:4px;
   top:6px;
 }
+
 @media only screen and (max-width: 750px){
   .App{
     flex-direction: column;
   }
-  .App .filter,.products {
+  .App .filter {
+    width: 97.5vw!important;
+  }
+  .App .products div{
     width: 97.5vw!important;
   }
 }
