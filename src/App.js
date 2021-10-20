@@ -50,29 +50,25 @@ function App() {
     setGenislik([response.genislik_min,response.genislik_max])
     })
   }
-  useEffect(() => {
-    setSelecteds(kategoriler.map(function(e){
-      return 'kategori:'+e
-    })
-    /*.concat(renkler.map(function(d){
-      return 'renk:'+d
-    }))*/
-    )
-  }, [renkler,kategoriler])
+  
 
   useEffect(() => {
     let filterResult=products.filter(item=>((item.hacim*1)>=agirlik[0] && (item.hacim*1)<=agirlik[1]) ? true : false)
     filterResult=filterResult.filter(item=>((item.genislik*1)>=genislik[0] && (item.genislik*1)<=genislik[1]) ? true : false)
     filterResult=filterResult.filter(item=>((item.yukseklik*1)>=yukseklik[0] && (item.yukseklik*1)<=yukseklik[1]) ? true : false)
-    filterResult=filterResult.filter(item=>{
-      if(selecteds.indexOf(('renk:'+item.renk))!=-1){
-        return true
-      }else if(selecteds.indexOf(('kategori:'+item.kategori))!=-1){
-        return true
-      }else{
-        return false
-      }
-    })
+    if(selecteds.length>0){
+      console.log(selecteds)
+      filterResult=filterResult.filter(item=>{
+        if(selecteds.indexOf(('renk:'+item.renk))!=-1){
+          return true
+        }else if(selecteds.indexOf(('kategori:'+item.kategori))!=-1){
+          return true
+        }else{
+          return false
+        }
+      })
+    }
+    
     
     setData(filterResult)
     //console.log("filterResult",filterResult,agirlik[0],agirlik[1])
@@ -102,7 +98,7 @@ function App() {
                     <React.Fragment key={`kategori-${index}`}>
                     
                     <label >
-                      <input type="checkbox" defaultChecked={true} onChange={(e)=>{
+                      <input type="checkbox" defaultChecked={false} onChange={(e)=>{
                         if(e.target.checked==true){
                           setSelecteds([...selecteds,'kategori:'+kategori])
                         }else{
