@@ -1,4 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;500&display=swap');
+#root{
+  background-color: #eee;
+}
 .loading{
   width: 100vw;
   height: 100vh;
@@ -9,7 +13,7 @@
   align-items: center;
 }
 .App{
-  font-family: 'Roboto',sans-serif;
+  font-family: 'Pompt',sans-serif;
   margin:0;
   padding:0;
   outline:0;
@@ -20,14 +24,14 @@
   display: flex;
 }
 .App .filter{
-  border-right: 1px solid #eee;
+  border-right: 1px solid #fff;
   width: 15vw;
-  height: 100vh;
-  overflow: auto;
+  max-height: 100vh;
+  overflow: scroll;
 }
 .App .filter button{
   border:0;outline: 0;
-  background-color: #eee;
+  background-color: #fff;
   width: 86%;
   padding:10px;
   margin-left: 7%;
@@ -42,18 +46,18 @@
   height: 100vh;
 }
 .App .kategoriler{
-  width: 80%;
+  width: 95%;
   margin:auto;
   display:flex;
   flex-direction: column;
   justify-content: center;
 }
 .App .filter .kategoriler{
-  background-color: #eee;
+  background-color: #fff;
   padding:10px;
 }
 .App .filter .kategoriler:not(:last-child){
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #fff;
   margin-bottom:20px;
 }
 .App .filter .kategoriler .MuiSlider-root{
@@ -82,12 +86,19 @@
   margin:5px;
   padding:5px;
 }
-.App .kategoriler .lister label:nth-child(2n+1){
+.App .kategoriler .lister label:hover{
+  background-color: #eee;
+  cursor: pointer;
+}
+.App .kategoriler .lister label input{
+  margin-right:10px;
+}
+/* .App .kategoriler .lister label:nth-child(2n+1){
   background-color: #ccc;
 }
 .App .kategoriler .lister label:nth-child(2n+0){
   background-color: #ddd;
-}
+} */
 .App .kategoriler .kategori div{
   display:flex;
   justify-content: center;
@@ -107,35 +118,47 @@
 .App .kategoriler .kategori div input:not(:last-child){
   border-right: 2px solid #ccc !important;
 }
-.products div{
+.products .listerp{
   display: flex;
+  max-height: 100vh;
+  overflow: scroll;
   flex-wrap: wrap;
 }
-.products div .productCard{
+.products .listerp .productCard{
   width: 250px;
-  margin-left:10px;
-  margin-bottom:20px;
+  margin-left:50px;
+  margin-top:25px;
+  margin-bottom:25px;
+  cursor: pointer;
   max-height: 300px;
-  background-color: #ddd;
+  background-color: #fff;
+  transition: 500ms all;
 }
-.products div .productCard .productImage{
-  height: 200px;
+.products .listerp .productCard:hover{
+  -webkit-box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.75);
+}
+.products .listerp .productCard .productImage{
+  height: 180px;
   cursor: pointer;
   width: 100%;
 }
-.products div .productCard .productTitle{
+.products .listerp .productCard .productTitle{
+  display:flex;justify-content: center;align-items: center;
   text-align: center;
   width: 100%;
-  background-color: #eee;
-  padding:5px 0px;
+  font-weight: bold;
+  background-color: #fff;
+  padding:8px 0px;
 }
-.products div .productCard .productProperties{
+.products .listerp .productCard .productProperties{
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  margin-top:8px;
+  margin-top:18px;
 }
-.products div .productCard .productProperties div{
+.products .listerp .productCard .productProperties div{
   border:1px solid #eee;
   width: calc(50% - 4px);
   height: 27px;
@@ -145,7 +168,11 @@
   align-items: center;
   justify-content: center;
 }
-.products div .productCard .productProperties div i{
+.products .listerp .productCard .productProperties div span{
+  font-size:10px;
+  margin-left:4px;
+}
+.products .listerp .productCard .productProperties div i{
   position:absolute;
   left:4px;
   top:6px;

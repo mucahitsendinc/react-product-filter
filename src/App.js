@@ -19,13 +19,14 @@ function App() {
   const [kategoriler,setKategoriler]=useState([])
   const [renkler,setRenkler]=useState([])
   const [selecteds,setSelecteds]=useState([])
-  const [kategoriVisible,setKategoriVisible]=useState(false)
+  const [kategoriVisible,setKategoriVisible]=useState(true)
   const [renkVisible,setRenkVisible]=useState(false)
 
   const [agirlik, setAgirlik] =  useState([1,5000]);
   const [yukseklik, setYukseklik] =  useState([1,3000]);
   const [genislik, setGenislik] =  useState([1,3000]);
   const [sizes,setSizes]=useState({hacim_min:0,hacim_max:10,agirlik_min:0,agirlik_max:10,yukseklik_min:0,yukseklik_max:10})
+
   const resetFilter = () => {
     
     if(sizes!=null){
@@ -33,6 +34,7 @@ function App() {
       setYukseklik([sizes.yukseklik_min,sizes.yukseklik_max])
       setGenislik([sizes.genislik_min,sizes.genislik_max])
     }
+
     setKategoriVisible(true)
     setRenkVisible(false)
   };
@@ -113,7 +115,7 @@ function App() {
             </div>
           </div>
 
-          <div className="kategoriler" onClick={()=>setRenkVisible(!renkVisible)}>
+          {/* <div className="kategoriler" onClick={()=>setRenkVisible(!renkVisible)}>
             <h1>Renkler<strong  ><i className={renkVisible ? 'fa fa-arrow-up' : 'fa fa-arrow-down'}></i></strong></h1>
             <div className="kategori lister" style={{display:renkVisible ? 'block' : 'none'}}>
               {
@@ -133,10 +135,10 @@ function App() {
               }
               
             </div>
-          </div>
+          </div> */}
 
           <div className="kategoriler">
-            <h1>Ağırlık <span>(gr)</span></h1>
+            <h1>Hacim <span>(cc)</span></h1>
             <div className="kategori">
               <div>
                 <input type="text" value={agirlik[0]} onChange={(e)=>setAgirlik([e.target.value,agirlik[1]])} />
@@ -198,29 +200,27 @@ function App() {
               <center>Ürün bulunamadı</center><br/>
             </div>
             :
-            <SRLWrapper>
+            <div className="listerp">
             {
               data.map((element,index)=>{
                 return (
                   <React.Fragment key={`product-${index}`}>
                   
-                  <div className="productCard">
+                  <div className="productCard" onClick={()=>window.location='https://cam.mucahit.dehasoft.com.tr/urunlerimiz.php?id='+element.id}>
                     <img src={element.resim} className="productImage" />
                     <div className="productTitle">
                       {element.baslik}
                     </div>
                     <div className="productProperties">
-                      <div><i className="fa fa-arrows-alt-h"></i> {element.genislik} </div>
-                      <div><i className="fa fa-arrows-alt-v"></i> {element.yukseklik} </div>
-                      <div><i className="fa fa-balance-scale-left"></i> {element.hacim} </div>
-                      <div><i className="fa fa-palette"></i> {element.renk} </div>
+                      <div><i className="fa fa-arrows-alt-h"></i> {element.genislik} <span>mm</span> </div>
+                      <div><i className="fa fa-arrows-alt-v"></i> {element.yukseklik} <span>mm</span> </div>
                     </div>
                   </div>
                   </React.Fragment>
                 )
               })
             }
-            </SRLWrapper>
+            </div>
           }
         </div>
       </div>
