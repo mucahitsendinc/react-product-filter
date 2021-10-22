@@ -1,4 +1,4 @@
-import React,{useState,useLayoutEffect,useEffect} from 'react';
+import React,{useState,useLayoutEffect,useEffect,useRef} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import { Sentry } from "react-activity";
@@ -14,6 +14,10 @@ function App() {
   const forceUpdate = useForceUpdate();
 
   const [data,setData]=useState([])
+
+  
+  const refcheckboxs = useRef([]);
+
 
   const [search,setSearch]=useState("")
 
@@ -36,9 +40,13 @@ function App() {
       setYukseklik([sizes.yukseklik_min,sizes.yukseklik_max])
       setGenislik([sizes.genislik_min,sizes.genislik_max])
     }
-
+    setSearch("")
     setKategoriVisible(true)
     setRenkVisible(false)
+    setSelecteds([])
+    refcheckboxs.current.map((e)=>{
+      e.checked=false
+    })
   };
 
   useLayoutEffect(() => {
@@ -55,6 +63,7 @@ function App() {
     })
   }
   
+ 
 
   useEffect(() => {
     let filterResult=products.filter(item=>((item.hacim*1)>=agirlik[0] && (item.hacim*1)<=agirlik[1]) ? true : false)
@@ -64,7 +73,6 @@ function App() {
       filterResult=filterResult.filter(item=> item.baslik.toUpperCase().replaceAll(" ","").indexOf(search.toUpperCase().replaceAll(" ",""))!=-1 ? true : false )
     }
     if(selecteds.length>0){
-      console.log(selecteds)
       filterResult=filterResult.filter(item=>{
         if(selecteds.indexOf(('renk:'+item.renk))!=-1){
           return true
@@ -109,7 +117,7 @@ function App() {
                     <React.Fragment key={`kategori-${index}`}>
                     
                     <label >
-                      <input type="checkbox" defaultChecked={false} onChange={(e)=>{
+                      <input type="checkbox" ref={e=>refcheckboxs.current[index]=e} defaultChecked={false} onChange={(e)=>{
                         if(e.target.checked==true){
                           setSelecteds([...selecteds,'kategori:'+kategori])
                         }else{
