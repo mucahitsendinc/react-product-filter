@@ -15,6 +15,8 @@ function App() {
 
   const [data,setData]=useState([])
 
+  const [search,setSearch]=useState("")
+
   const [products,setProducts]=useState([])
   const [kategoriler,setKategoriler]=useState([])
   const [renkler,setRenkler]=useState([])
@@ -58,6 +60,9 @@ function App() {
     let filterResult=products.filter(item=>((item.hacim*1)>=agirlik[0] && (item.hacim*1)<=agirlik[1]) ? true : false)
     filterResult=filterResult.filter(item=>((item.genislik*1)>=genislik[0] && (item.genislik*1)<=genislik[1]) ? true : false)
     filterResult=filterResult.filter(item=>((item.yukseklik*1)>=yukseklik[0] && (item.yukseklik*1)<=yukseklik[1]) ? true : false)
+    if(search!=""){
+      filterResult=filterResult.filter(item=> item.baslik.toUpperCase().replaceAll(" ","").indexOf(search.toUpperCase().replaceAll(" ",""))!=-1 ? true : false )
+    }
     if(selecteds.length>0){
       console.log(selecteds)
       filterResult=filterResult.filter(item=>{
@@ -75,7 +80,7 @@ function App() {
     setData(filterResult)
     //console.log("filterResult",filterResult,agirlik[0],agirlik[1])
 
-  }, [agirlik,yukseklik,genislik,selecteds])
+  }, [agirlik,yukseklik,genislik,selecteds,search])
   
 
   return (
@@ -90,6 +95,10 @@ function App() {
         
         <div className="filter">
           <button onClick={()=>resetFilter()}>Filtreyi Temizle</button>
+
+          <div className="kategoriler">
+            <input type="text" value={search} onChange={(e)=>setSearch(e.target.value)} placeholder="Ürün adı ara..." />
+          </div>
 
           <div className="kategoriler" onClick={()=>setKategoriVisible(!kategoriVisible)}>
             <h1>Kategoriler <strong ><i className={kategoriVisible ? 'fa fa-arrow-up' : 'fa fa-arrow-down'}></i></strong></h1>
@@ -206,16 +215,18 @@ function App() {
                 return (
                   <React.Fragment key={`product-${index}`}>
                   
-                  <div className="productCard" onClick={()=>window.location='https://cam.mucahit.dehasoft.com.tr/urunlerimiz.php?id='+element.id}>
-                    <img src={element.resim} className="productImage" />
-                    <div className="productTitle">
-                      {element.baslik}
+                    <div className="productCard" onClick={()=>window.location='https://cam.mucahit.dehasoft.com.tr/urunlerimiz.php?id='+element.id}>
+                      <img src={element.resim} className="productImage" />
+                      <div className="productTitle">
+                        {element.baslik}
+                      </div>
+                      <div className="productProperties">
+                        <div><i className="fa fa-arrows-alt-h"></i> {element.genislik} <span>mm</span> </div>
+                        <div><i className="fa fa-arrows-alt-v"></i> {element.yukseklik} <span>mm</span> </div>
+                        <div className="full"><i className="fa fa-weight"></i> {element.yukseklik} <span>cc</span> </div>
+                      </div>
                     </div>
-                    <div className="productProperties">
-                      <div><i className="fa fa-arrows-alt-h"></i> {element.genislik} <span>mm</span> </div>
-                      <div><i className="fa fa-arrows-alt-v"></i> {element.yukseklik} <span>mm</span> </div>
-                    </div>
-                  </div>
+
                   </React.Fragment>
                 )
               })

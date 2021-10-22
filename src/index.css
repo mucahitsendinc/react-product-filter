@@ -80,6 +80,11 @@
 .App .kategoriler{
   user-select: none;
 }
+.App .kategoriler input[type="text"]{
+  height: 30px;
+  outline:0;
+  border:0;
+}
 .App .kategoriler .lister label{
   display: flex;
   align-items: center;
@@ -167,6 +172,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.products .listerp .productCard .productProperties .full{
+  width: 100%;
 }
 .products .listerp .productCard .productProperties div span{
   font-size:10px;
