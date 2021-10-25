@@ -3,11 +3,12 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import { Sentry } from "react-activity";
 import "react-activity/dist/Sentry.css";
-import { SRLWrapper } from "simple-react-lightbox";
+
 function useForceUpdate(){
     const [value, setValue] = useState(0); // integer state
     return () => setValue(value => value + 1); // update the state to force render
 }
+
 
 function App() {
   
@@ -17,6 +18,8 @@ function App() {
 
   
   const refcheckboxs = useRef([]);
+
+  const [activePage,setActivePage] =useState(1);
 
 
   const [search,setSearch]=useState("")
@@ -32,6 +35,10 @@ function App() {
   const [yukseklik, setYukseklik] =  useState([1,3000]);
   const [genislik, setGenislik] =  useState([1,3000]);
   const [sizes,setSizes]=useState({hacim_min:0,hacim_max:10,agirlik_min:0,agirlik_max:10,yukseklik_min:0,yukseklik_max:10})
+
+  const handlePageChange=(pageNumber)=>{
+    setActivePage(pageNumber)
+  }
 
   const resetFilter = () => {
     
@@ -165,6 +172,7 @@ function App() {
                 value={agirlik}
                 min={(sizes.hacim_min)}
                 max={(sizes.hacim_max)}
+                style={{color:'#007f7f'}}
                 onChange={(event,newValue)=>setAgirlik(newValue)}
                 valueLabelDisplay="off"
               />
@@ -184,6 +192,7 @@ function App() {
                 value={yukseklik}
                 min={sizes.yukseklik_min}
                 max={sizes.yukseklik_max}
+                style={{color:'#007f7f'}}
                 onChange={(event,newValue)=>setYukseklik(newValue)}
                 valueLabelDisplay="off"
               />
@@ -202,6 +211,7 @@ function App() {
                 value={genislik}
                 min={sizes.genislik_min}
                 max={sizes.genislik_max}
+                style={{color:'#007f7f'}}
                 onChange={(event,newValue)=>setGenislik(newValue)}
                 valueLabelDisplay="off"
               />
@@ -221,9 +231,9 @@ function App() {
             {
               data.map((element,index)=>{
                 return (
-                  <React.Fragment key={`product-${index}`}>
+                  <React.Fragment itemClass="page-item" linkClass="page-link" key={`product-${index}`}>
                   
-                    <div className="productCard" onClick={()=>window.location='https://cam.mucahit.dehasoft.com.tr/urunlerimiz.php?id='+element.id}>
+                    <div className="productCard"  onClick={()=>window.location='https://cam.mucahit.dehasoft.com.tr/urunlerimiz.php?id='+element.id}>
                       <img src={element.resim} className="productImage" />
                       <div className="productTitle">
                         {element.baslik}
@@ -231,7 +241,7 @@ function App() {
                       <div className="productProperties">
                         <div><i className="fa fa-arrows-alt-h"></i> {element.genislik} <span>mm</span> </div>
                         <div><i className="fa fa-arrows-alt-v"></i> {element.yukseklik} <span>mm</span> </div>
-                        <div className="full"><i className="fa fa-weight"></i> {element.yukseklik} <span>cc</span> </div>
+                        <div className="full"><i className="fa fa-weight"></i> {element.hacim} <span>cc</span> </div>
                       </div>
                     </div>
 
@@ -239,6 +249,7 @@ function App() {
                 )
               })
             }
+            
             </div>
           }
         </div>

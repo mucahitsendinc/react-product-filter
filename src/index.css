@@ -1,11 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;500&display=swap');
 #root{
-  background-color: #eee;
 }
 .loading{
-  width: 100vw;
-  height: 100vh;
+  height: 100%;
   padding:0;
   margin:0;
   display: flex;
@@ -16,39 +14,43 @@
   font-family: 'Pompt',sans-serif;
   margin:0;
   padding:0;
+  background-color: #eee;
   outline:0;
   border:0;
   text-decoration: none;
   width: 100vw;
-  height: 100%;
+  height: auto;
   display: flex;
 }
 .App .filter{
-  border-right: 1px solid #fff;
   width: 15vw;
-  max-height: 100vh;
+  margin-top:20px;
+  margin-right:6vw;
+  margin-left:5vw;
   overflow: scroll;
 }
 .App .filter button{
   border:0;outline: 0;
-  background-color: #fff;
+  background-color: #007f7f;
   width: 86%;
   padding:10px;
   margin-left: 7%;
+  color:#fff;
+  font-weight: bold;
   margin-bottom: 30px;
+  transition: 500ms all;
   cursor: pointer;
 }
 .App .filter button:hover{
-  background-color: #ccc;
+  background-color: darkgreen;
 }
 .App .products{
   width: 84vw;
-  height: 100vh;
 }
 .App .kategoriler{
-  width: 95%;
+  width: 90%;
   margin:auto;
-  display:flex;
+display:flex;
   flex-direction: column;
   justify-content: center;
 }
@@ -78,6 +80,7 @@
   font-size:14px;
 }
 .App .kategoriler{
+  border:1px solid #000;
   user-select: none;
 }
 .App .kategoriler input[type="text"]{
@@ -125,27 +128,27 @@
 }
 .products .listerp{
   display: flex;
-  max-height: 100vh;
   overflow: scroll;
   flex-wrap: wrap;
 }
 .products .listerp .productCard{
   width: 250px;
-  margin-left:50px;
-  margin-top:25px;
-  margin-bottom:25px;
+  margin-left:10px;
+  margin-top:10px;
+  margin-bottom:10px;
   cursor: pointer;
-  max-height: 300px;
+  background-color: red;
+  max-height: 570px;
   background-color: #fff;
   transition: 500ms all;
 }
 .products .listerp .productCard:hover{
-  -webkit-box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.75);
-  box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 0px 0px 25px 0px #007f7f;
+  -moz-box-shadow: 0px 0px 25px 0px #007f7f;
+  box-shadow: 0px 0px 25px 0px #007f7f;
 }
 .products .listerp .productCard .productImage{
-  height: 180px;
+  height: 280px;
   cursor: pointer;
   width: 100%;
 }
@@ -191,9 +194,26 @@
     flex-direction: column;
   }
   .App .filter {
+    margin-left:.5vw;
     width: 97.5vw!important;
+  }
+  .App .products {
+    margin-left: 1.5vw;
   }
   .App .products div{
     width: 97.5vw!important;
   }
+  .products .listerp .productCard{
+    width: 45vw!important;
+  }
+   .products .listerp .productCard .productTitle{
+     width: 45vw!important;
+   }
+   .products .listerp .productCard .productProperties .full{
+     width: 100%!important;
+   }
+   .products .listerp .productCard .productProperties div{
+     width: 25vw!important;
+     justify-content: left;
+   }
 }
